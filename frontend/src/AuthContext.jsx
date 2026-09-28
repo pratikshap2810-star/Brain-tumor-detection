@@ -6,8 +6,18 @@ const AuthContext = createContext(null);
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(() => {
     const raw = localStorage.getItem("user");
-    return raw ? JSON.parse(raw) : null;
-  });
+
+if (!raw || raw === "undefined" || raw === "null") {
+  return null;
+}
+
+try {
+  return JSON.parse(raw);
+} catch {
+  localStorage.removeItem("user");
+  localStorage.removeItem("access_token");
+  return null;
+}
 
   async function login(email, password) {
     const res = await client.post("/auth/login", { email, password });
