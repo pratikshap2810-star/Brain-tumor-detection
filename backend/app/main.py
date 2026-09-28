@@ -7,6 +7,7 @@ from fastapi import HTTPException
 
 from app.core.config import settings
 from app.core.database import Base, engine
+from app.core.seed import seed
 from app.models import models  # noqa: F401 -- ensures models are registered before create_all
 from app.routers import auth, cases, predictions, reports, models_router, health
 
@@ -18,9 +19,19 @@ app = FastAPI(
     version="1.0.0",
 )
 
+
+@app.on_event("startup")
+def seed_on_startup():
+    seed()
+
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://localhost:3000"],
+    allow_origins=[
+        "http://localhost:5173",
+        "http://localhost:3000",
+        "https://brain-tumor-detection-gtqc.onrender.com",
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
