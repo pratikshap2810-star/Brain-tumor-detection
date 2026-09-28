@@ -9,7 +9,7 @@ services:
     volumes:
       - ./backend/uploads:/app/uploads
       - backend_db:/app/db_data
-      - ./ml:/ml   # so app/ml/inference.py can import train.py/gradcam.py + load models
+      - ./ml/models:/app/models   # trained model + metrics (optional)
     environment:
       - DATABASE_URL=sqlite:////app/db_data/app.db
       # For SQL Server instead, comment the line above and uncomment below

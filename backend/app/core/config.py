@@ -33,8 +33,18 @@ class Settings(BaseSettings):
     MAX_UPLOAD_MB: int = 10
     ALLOWED_IMAGE_TYPES: tuple = ("image/jpeg", "image/png")
 
-    MODEL_PATH: Path = BASE_DIR.parent / "ml" / "models" / "best_model.pth"
-    METRICS_PATH: Path = BASE_DIR.parent / "ml" / "models" / "metrics.json"
+    # Looks in backend/models/ first (self-contained deploys, e.g. Render/Docker),
+    # then falls back to ml/models/ (local dev right after running ml/train.py).
+    MODEL_PATH: Path = (
+        BASE_DIR / "models" / "best_model.pth"
+        if (BASE_DIR / "models" / "best_model.pth").exists()
+        else BASE_DIR.parent / "ml" / "models" / "best_model.pth"
+    )
+    METRICS_PATH: Path = (
+        BASE_DIR / "models" / "metrics.json"
+        if (BASE_DIR / "models" / "metrics.json").exists()
+        else BASE_DIR.parent / "ml" / "models" / "metrics.json"
+    )
 
     # Optional: if set, GenAI report assistant will call Anthropic's API
     # to phrase the draft report; if unset, a deterministic template is

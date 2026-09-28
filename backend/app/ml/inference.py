@@ -13,18 +13,12 @@ as non-meaningful -- per the "do not use fake accuracy values" and
 (python ml/train.py) and this flag flips to false automatically.
 """
 import json
-import sys
-from pathlib import Path
 
 import torch
 from PIL import Image
 
-# Make ml/ importable (train.py, gradcam.py live there, one level up from backend/)
-ML_DIR = Path(__file__).resolve().parent.parent.parent.parent / "ml"
-sys.path.insert(0, str(ML_DIR))
-
-from train import build_model, CLASSES, IMG_SIZE  # noqa: E402
-from gradcam import run_gradcam, DISCLAIMER_TEXT   # noqa: E402
+from app.ml.model_def import build_model, CLASSES, IMG_SIZE
+from app.ml.gradcam import run_gradcam, DISCLAIMER_TEXT
 
 from app.core.config import settings
 
