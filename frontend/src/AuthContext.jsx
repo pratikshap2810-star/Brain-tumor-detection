@@ -1,4 +1,3 @@
-```jsx
 import { createContext, useContext, useState } from "react";
 import client from "./api/client";
 
@@ -41,14 +40,21 @@ export function AuthProvider({ children }) {
     setUser(null);
   }
 
+  const authValue = {
+    user,
+    login,
+    logout,
+  };
+
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider value={authValue}>
       {children}
     </AuthContext.Provider>
   );
 }
 
-export function useAuth() {
+const useAuth = () => {
   return useContext(AuthContext);
-}
-```
+};
+
+export { useAuth };
